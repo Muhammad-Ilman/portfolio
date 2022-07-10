@@ -17,6 +17,8 @@ const next_btn = document.querySelector(".next-btn");
 const links = document.querySelectorAll(".nav-link");
 const toggle_btn = document.querySelector(".toggle-btn");
 
+const hamburger = document.querySelector(".hamburger");
+
 let mlPlayed = false;
 // filter animation
 
@@ -165,8 +167,8 @@ let firstTheme = localStorage.getItem("dark");
 changeTheme(+firstTheme)
 
 function changeTheme(isDark) {
-  if(isDark) {
-    document.body.classList.add("dark"); 
+  if (isDark) {
+    document.body.classList.add("dark");
     toggle_btn.classList.replace("uil-moon", "uil-sun");
     localStorage.setItem("dark", 1);
   } else {
@@ -179,6 +181,22 @@ function changeTheme(isDark) {
 toggle_btn.addEventListener("click", () => {
   changeTheme(!document.body.classList.contains("dark"));
 })
+
+hamburger.addEventListener("click", () => {
+  document.body.classList.toggle("open");
+  document.body.classList.toggle("stopScrolling");
+})
+
+document.querySelector(".overlay").addEventListener("click", () => {
+  document.body.classList.remove("open");
+  document.body.classList.remove("stopScrolling");
+})
+links.forEach((link) =>
+  link.addEventListener("click", () => {
+    document.body.classList.remove("open");
+    document.body.classList.remove("stopScrolling");
+  })
+);
 
 var mixer = mixitup(".portfolio-gallery", {
   selectors: {
