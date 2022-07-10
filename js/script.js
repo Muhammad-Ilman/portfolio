@@ -14,10 +14,14 @@ const images = document.querySelectorAll(".images img");
 const prev_btn = document.querySelector(".prev-btn");
 const next_btn = document.querySelector(".next-btn");
 
+const links = document.querySelectorAll(".nav-link");
+const toggle_btn = document.querySelector(".toggle-btn");
 
 let mlPlayed = false;
+// filter animation
 
 window.addEventListener("scroll", () => {
+  activeLink();
   if (!skilsPlayed) skillsCounter();
   if (!mlPlayed) mlCounter();
 });
@@ -89,7 +93,7 @@ function mlCounter() {
   ml_counters.forEach(ctr => {
     let target = +ctr.dataset.target;
 
-    console.log(ctr)
+    // console.log(ctr)
 
     setTimeout(() => {
       updateCounter(ctr, target)
@@ -136,13 +140,52 @@ function changeImage(index) {
   images[index].classList.add("showImage");
 }
 
-// filter animation
-let mixer = mixitup(".portfolio-gallery", {
+// Change actve link 
+function activeLink() {
+  // console.log("function trusted");
+  let sections = document.querySelectorAll("section[id");
+  let passedSections = Array.from(sections).map((sct, i) => {
+    return {
+      y: sct.getBoundingClientRect().top - header.offsetHeight,
+      id: i
+    };
+  }).filter(sct => sct.y <= 0);
+
+  let currSectionID = passedSections.at(-1).id;
+
+  links.forEach((l) => l.classList.remove("active"));
+  links[currSectionID].classList.add("active");
+  //console.log(currSectionID)
+}
+
+activeLink();
+
+// change theme
+let firstTheme = localStorage.getItem("dark");
+changeTheme(+firstTheme)
+
+function changeTheme(isDark) {
+  if(isDark) {
+    document.body.classList.add("dark"); 
+    toggle_btn.classList.replace("uil-moon", "uil-sun");
+    localStorage.setItem("dark", 1);
+  } else {
+    document.body.classList.remove("dark");
+    toggle_btn.classList.replace("uil-sun", "uil-moon");
+    localStorage.setItem("dark", 0);
+  }
+}
+
+toggle_btn.addEventListener("click", () => {
+  changeTheme(!document.body.classList.contains("dark"));
+})
+
+var mixer = mixitup(".portfolio-gallery", {
   selectors: {
-    target: ".prt-card",
+    target: '.prt-card'
   },
   animation: {
-    duration: 500,
+    duration: 300
   }
 });
 
@@ -159,6 +202,7 @@ sr.reveal(".showcase-image", {
   origin: "top",
   delay: 700
 });
+
 
 // swiper
 const swiper = new Swiper(".swiper", {
